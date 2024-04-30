@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         // define our book schema columns
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table)
+        {
             $table->id();
             $table->string('title');
             $table->string('author');
