@@ -1,0 +1,33 @@
+version: '2'
+services:
+    web:
+        build:
+            context: ./
+            dockerfile: dockerfile/web.docker
+        container_name: laravel-web
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - app
+        ports:
+            - "${APP_PORT}:80"
+            - "${APP_PORT_SSL}:443"
+        networks:
+            - backend
+        external_links:
+            - app
+    app:
+        build:
+            context: ./
+            dockerfile: dockerfile/app.docker
+        container_name: laravel-app
+        hostname: localhost
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www
+        networks:
+            - backend
+networks:
+    backend:
+        driver: "bridge"
