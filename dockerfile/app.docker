@@ -1,0 +1,22 @@
+FROM php:8.2.0-fpm
+
+RUN apt-get update \
+    && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN apt-get update -y && apt-get install -y git libxml2-dev default-mysql-client zlib1g-dev libjpeg-dev libpng-dev libc-client-dev libkrb5-dev
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions mbstring bcmath soap pdo_mysql zip exif pcntl
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
+RUN docker-php-ext-install imap
+RUN apt-get install -y libz-dev
+RUN apt-get update && apt-get install -y vim
+RUN docker-php-ext-install gd
+RUN docker-php-ext-enable gd
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN apt-get install -y sendmail
+
+ADD ./dockerfile/uploads.ini /usr/local/etc/php/php.ini
+
+WORKDIR /var/www
+
+USER www-data
