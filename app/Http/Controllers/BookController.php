@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Book; // import book model
+use App\Models\Author; // import author model
 
 class BookController extends Controller
 {
@@ -38,10 +39,18 @@ class BookController extends Controller
             'genre' => 'required',
         ]);
 
+        //firstOrCreate matches record found returns the record, if not record is found, creates new record in database
+        //fristOrNew matches record found and return the reocrd, if not found, returns new instance but does not presist in database
+        // must call save() explicity to save to database
+        // check author table if name already exists 
+        $author = Author::firstOrCreate([
+            'name' => $request->author
+        ]);
         // create new book object and set columns
         $book = new Book();
         $book->title = $request->title;
-        $book->author = $request->author;
+        // $book->author = $request->author; // not sure if this is redundant now that we are storing author_id in its own table 
+        $book->author_id = $author->id; // use the found or created author id
         $book->year = $request->year;
         $book->genre = $request->genre;
         $book->save();
