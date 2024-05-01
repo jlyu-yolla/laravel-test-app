@@ -59,4 +59,44 @@ class BookController extends Controller
         return redirect('/books');
     }
 
+    public function edit($id)
+    {
+        $book = Book::findOrFail($id);
+        $authors = Author::all();
+        return view('books.edit', ['book' => $book, 'authors' => $authors]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            'year' => 'required|integer',
+            'genre' => 'required',
+        ]);
+
+        //if new author is inputted as edit
+        $author = Author::firstOrCreate(['name' => $request->author]);
+
+        $book = Book::findOrFail($id);
+        $book->update([
+            'title' => $request->title,
+            'author_id' => $author->id,
+            'year' => $request->year,
+            'genre' => $request->genre,
+        ]);
+
+        return redirect('/books');
+    }
+
+    // delete book
+    public function destroy($id)
+    {
+        // find book 
+        $book = Book::findOrFail($id);
+        $book->delete();
+
+        return redirect('/books');
+    }
+
 }

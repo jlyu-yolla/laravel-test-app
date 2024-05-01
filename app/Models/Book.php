@@ -9,6 +9,9 @@ class Book extends Model
 {
     use HasFactory;
 
+    //allow mass assignment when updating book instance
+    protected $fillable = ['title', 'author_id', 'year', 'genre'];
+
     public function author()
     {
         return $this->belongsTo(Author::class); // N:1 relationship

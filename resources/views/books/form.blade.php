@@ -1,3 +1,7 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<h1>Add Book Entry</h1>
+
 <form method = "post" action = "/books">
     @csrf <!-- need to add this to any write methods 
         the CSRF protection middleware can validate the request -->
