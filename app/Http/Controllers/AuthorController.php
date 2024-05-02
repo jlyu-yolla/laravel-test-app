@@ -12,7 +12,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::all();
-        return view('authors.index', ['authors' => $authors]);
+        return view('authors.view', ['authors' => $authors]);
     }
 
     public function create()
@@ -30,7 +30,7 @@ class AuthorController extends Controller
         $author->name = $request->name;
         $author->save();
 
-        return redirect()->route('authors.index');
+        return redirect('/authors');
     }
 
     public function edit(Author $author)
@@ -44,17 +44,17 @@ class AuthorController extends Controller
             'name' => 'required|string',
         ]);
         
-        $author->update([
-            'name' => $request->name,
-        ]);
-        
-        return redirect()->route('authors.index');
+        $author->name = $request->name;
+        $author->save();
+    
+        return response()->json(['success' => true]); // response for front end
     }
+    
 
     public function destroy(Author $author)
     {
         //find author
         $author->delete();
-        return redirect()->route('authors.index');
+        return redirect('/authors');
     }
 }
