@@ -15,7 +15,7 @@
 
     <div>
         <label for= "author">Author:</label>
-        <input type="text" id="author" name="author" value="{{ $book->author->name }}">
+        <input type="text" id="author" name="author" value="{{ $book->author ? $book->author->name : '' }}" required>
     </div>
 
     <div>

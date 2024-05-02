@@ -32,7 +32,7 @@ class BookView extends Command
         // Output each book's details
 
         foreach ($books as $book) {
-            $authorName = $book->author->name; // for some reason can't do $book->author->name
+            $authorName = $book->author ? $book->author->name : 'Not Set/NULL';// for some reason can't do $book->author->name
             $this->line("$book->title - $authorName - $book->year - $book->genre");
         }
     }

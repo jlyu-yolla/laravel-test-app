@@ -11,7 +11,7 @@
     @foreach ($books as $book)
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <div>
-                {{ $book->title }} - {{ $book->author->name }} - {{ $book->year }} - {{ $book->genre }}
+                {{ $book->title }} - {{ $book->author ? $book->author->name : 'Not Set' }} - {{ $book->year }} - {{ $book->genre }}
             </div>
             <div class="dropdown">
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-{{ $book->id }}" data-bs-toggle="dropdown" aria-expanded="false">

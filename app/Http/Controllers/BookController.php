@@ -8,15 +8,26 @@ use Illuminate\Http\Request;
 use App\Models\Book; // import book model
 use App\Models\Author; // import author model
 
+use App\Services\BookService;
+use App\Services\AuthorService;
+
 class BookController extends Controller
 {
+    protected $bookService;
+    protected $authorService;
+
+    public function __construct(BookService $bookService, AuthorService $authorService) {
+        $this->bookService = $bookService;
+        $this->authorService = $authorService;
+    }
     // implement routes
 
     // list all books
     public function index()
     {
-        $books = Book::all(); //retrieve all of the records from the model's associated database table
+        // $books = Book::all(); //retrieve all of the records from the model's associated database table
 
+        $books = $this->bookService->getAllBooks(); //should ideally be done with repository layer
         return view('books.view', ['books' => $books]); // return view from controller with global view() helper
     }
 
@@ -43,18 +54,21 @@ class BookController extends Controller
         //fristOrNew matches record found and return the reocrd, if not found, returns new instance but does not presist in database
         // must call save() explicity to save to database
         // check author table if name already exists 
-        $author = Author::firstOrCreate([
-            'name' => $request->author
-        ]);
-        // create new book object and set columns
-        $book = new Book();
-        $book->title = $request->title;
-        // $book->author = $request->author; // not sure if this is redundant now that we are storing author_id in its own table 
-        $book->author_id = $author->id; // use the found or created author id
-        $book->year = $request->year;
-        $book->genre = $request->genre;
-        $book->save();
+        // $author = Author::firstOrCreate([
+        //     'name' => $request->author
+        // ]);
+        // // create new book object and set columns
+        // $book = new Book();
+        // $book->title = $request->title;
+        // // $book->author = $request->author; // not sure if this is redundant now that we are storing author_id in its own table 
+        // $book->author_id = $author->id; // use the found or created author id
+        // $book->year = $request->year;
+        // $book->genre = $request->genre;
+        // $book->save();
         // or Book::create([...]) not sure what the difference is
+
+        //with service layer
+        $this->bookService->createBook($request->all());
 
         return redirect('/books');
     }
@@ -63,6 +77,10 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         $authors = Author::all();
+
+        $book = $this->bookService->findBook($id);
+        $authors = $this->authorService->getAllAuthors();
+
         return view('books.edit', ['book' => $book, 'authors' => $authors]);
     }
 
@@ -76,16 +94,17 @@ class BookController extends Controller
         ]);
 
         //if new author is inputted as edit
-        $author = Author::firstOrCreate(['name' => $request->author]);
+        // $author = Author::firstOrCreate(['name' => $request->author]);
 
-        $book = Book::findOrFail($id);
-        $book->update([
-            'title' => $request->title,
-            'author_id' => $author->id,
-            'year' => $request->year,
-            'genre' => $request->genre,
-        ]);
-
+        // $book = Book::findOrFail($id);
+        // $book->update([
+        //     'title' => $request->title,
+        //     'author_id' => $author->id,
+        //     'year' => $request->year,
+        //     'genre' => $request->genre,
+        // ]);
+        
+        $this->bookService->updateBook($id, $request->all());
         return redirect('/books');
     }
 
@@ -93,8 +112,10 @@ class BookController extends Controller
     public function destroy($id)
     {
         // find book 
-        $book = Book::findOrFail($id);
-        $book->delete();
+        // $book = Book::findOrFail($id);
+        // $book->delete();
+
+        $this->bookService->deleteBook($id);
 
         return redirect('/books');
     }

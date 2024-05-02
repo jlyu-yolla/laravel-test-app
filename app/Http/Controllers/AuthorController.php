@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Author; // import author model
-
+use App\Services\AuthorService;
 class AuthorController extends Controller
 {
+    protected $authorService;
+
+    public function __construct(AuthorService $authorService)
+    {
+        $this->authorService = $authorService;
+    }
+
     public function index()
     {
-        $authors = Author::all();
+        //$authors = Author::all();
+        $authors = $this->authorService->getAllAuthors();
         return view('authors.view', ['authors' => $authors]);
     }
 
@@ -26,10 +34,11 @@ class AuthorController extends Controller
             'name' => 'required|string',
         ]);
 
-        $author = new Author();
-        $author->name = $request->name;
-        $author->save();
+        // $author = new Author();
+        // $author->name = $request->name;
+        // $author->save();
 
+        $this->authorService->createAuthor($request->all());
         return redirect('/authors');
     }
 
@@ -44,9 +53,10 @@ class AuthorController extends Controller
             'name' => 'required|string',
         ]);
         
-        $author->name = $request->name;
-        $author->save();
-    
+        // $author->name = $request->name;
+        // $author->save();
+        
+        $this->authorService->updateAuthor($author, $request->all());
         return response()->json(['success' => true]); // response for front end
     }
     
@@ -54,7 +64,8 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         //find author
-        $author->delete();
+        // $author->delete();
+        $this->authorService->deleteAuthor($author);
         return redirect('/authors');
     }
 }
