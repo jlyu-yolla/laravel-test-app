@@ -1,7 +1,10 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- added bootstrap -->
-<h1>Books List</h1>
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Books List</h1>
+    <a href="/authors" class="btn btn-sm">View Authors</a> <!-- Button to navigate to authors page -->
+</div>
 
 <ul class="list-group mb-3">
     <a href="/books/create" class="btn btn-primary mb-3">Add New Book</a> <!-- link to the create page -->

@@ -3,7 +3,10 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="container">
-    <h1>Authors</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Authors</h1>
+        <a href="/books" class="btn btn-sm">View Authors</a> <!-- Button to navigate to authors page -->
+    </div>
     <form action="/authors" method="POST">
         @csrf
         <div class="input-group mb-3">
