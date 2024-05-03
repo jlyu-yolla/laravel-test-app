@@ -15,7 +15,7 @@ class AuthorService
 
     public function createAuthor($data)
     {
-        return Author::create($data);
+        return Author::firstOrCreate($data);
     }
 
     public function updateAuthor(Author $author, $data)

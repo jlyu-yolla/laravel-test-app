@@ -22,7 +22,7 @@ class BookService
         $this->authorService = $authorService;
     }
 
-    public function getAllBooks()
+    public function getAllBooks() //from to 
     {
         return Book::with('author')->get();
     }
@@ -34,7 +34,10 @@ class BookService
 
     public function createBook($data)
     {
-        $author = Author::firstOrCreate(['name' => $data['author']]);
+        // $author = Author::firstOrCreate(['name' => $data['author']]);
+        //use author service for any author queries or writes
+        $author = $this->authorService->createAuthor(['name' => $data['author']]);
+
         $data['author_id'] = $author->id;
         return Book::create($data);
     }

@@ -5,7 +5,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Authors</h1>
-        <a href="/books" class="btn btn-sm">View Authors</a> <!-- Button to navigate to authors page -->
+        <a href="/books" class="btn btn-sm">View Books</a> <!-- Button to navigate to authors page -->
     </div>
     <form action="/authors" method="POST">
         @csrf
